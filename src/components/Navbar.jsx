@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className=" px-8 py-4 flex justify-between items-center shadow-md">
+    <div className=" px-8 py-5 flex justify-between items-center shadow-md">
+        <div>
+            
+        </div>
 
       {/* Logo */}
       <div className="text-2xl font-bold cursor-pointer">
