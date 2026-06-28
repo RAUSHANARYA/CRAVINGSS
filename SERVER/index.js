@@ -4,30 +4,39 @@ dotenv.config();
 import express from "express";
 import connectDB from "./src/config/db.js";
 
+import AuthRouter from "./src/routes/auth.route.js";
+import PublicRouter from "./src/routes/public.route.js";
+
+
 const app = express();
 
 // Middleware
 app.use(express.json());
 
+// Routes
+app.use("/auth", AuthRouter);      // Register, Login, Logout
+app.use("/public", PublicRouter);  // Public Routes
+
+
 // Test Route
 app.get("/", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "Server is Running ",
-    });
+  res.status(200).json({
+    success: true,
+    message: "Server is Running",
+  });
 });
 
 // Connect MongoDB and Start Server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
-    console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 
-    try {
-        await connectDB();
-        console.log("MongoDB Connected Successfully");
-    } catch (error) {
-        console.log("MongoDB Connection Failed");
-        console.log(error.message);
-    }
+  try {
+    await connectDB();
+    console.log("MongoDB Connected Successfully");
+  } catch (error) {
+    console.log("MongoDB Connection Failed");
+    console.log(error.message);
+  }
 });
