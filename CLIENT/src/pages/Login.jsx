@@ -1,8 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import api from "../config/api.config";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const [user, setUser] = useState({
+  const navigate = useNavigate();
+
+  // Auth Context
+  const { setUser } = useAuth();
+
+  // Login Form
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
@@ -10,22 +19,53 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Handle Input Change
   const handleChange = (e) => {
-    setUser({
-      ...user,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  // Handle Login
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    setTimeout(() => {
-      console.log(user);
+      const res = await api.post("/auth/login", formData);
+
+      // Success Message
+      toast.success(res.data.message);
+
+      // Save User in Session Storage
+      sessionStorage.setItem(
+        "UserData",
+        JSON.stringify(res.data.user)
+      );
+
+      // Save User in Context
+      setUser(res.data.user);
+
+      // Clear Form
+      setFormData({
+        email: "",
+        password: "",
+      });
+
+      // Redirect Dashboard
+      navigate("/dashboard");
+
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Login Failed"
+      );
+
+      console.log(error.response?.data);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -41,13 +81,11 @@ const Login = () => {
           Login to continue ordering your favourite food.
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="space-y-6">
+
+          {/* Email */}
 
           <div>
-
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address
             </label>
@@ -55,14 +93,15 @@ const Login = () => {
             <input
               type="email"
               name="email"
-              value={user.email}
+              value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
               required
-              className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none transition duration-300 focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
             />
-
           </div>
+
+          {/* Password */}
 
           <div>
 
@@ -85,14 +124,16 @@ const Login = () => {
             <input
               type={showPassword ? "text" : "password"}
               name="password"
-              value={user.password}
+              value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
               required
-              className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none transition duration-300 focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
             />
 
           </div>
+
+          {/* Remember Me */}
 
           <div className="flex justify-between items-center">
 
@@ -103,7 +144,7 @@ const Login = () => {
                 className="accent-orange-500"
               />
 
-              Remember me
+              Remember Me
 
             </label>
 
@@ -116,6 +157,8 @@ const Login = () => {
 
           </div>
 
+          {/* Login Button */}
+
           <button
             type="submit"
             disabled={loading}
@@ -125,6 +168,8 @@ const Login = () => {
           </button>
 
         </form>
+
+        {/* Register */}
 
         <div className="border-t mt-8 pt-6 text-center">
 

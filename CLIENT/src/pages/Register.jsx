@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
+import api from "../config/api.config";
+import toast from "react-hot-toast";
+
+
 const Register = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -10,7 +15,10 @@ const Register = () => {
     gender: "",
     password: "",
     confirmPassword: "",
+   
   });
+   const navigate = useNavigate();
+  
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,13 +33,53 @@ const Register = () => {
   };
 
   // Handle Form Submit
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    const handleSubmit = async (e) => {
+        console.log("HANDLE SUBMIT CALLED");
+  e.preventDefault();
 
-      console.clear();
+  if (formData.password !== formData.confirmPassword) {
+  toast.error("Passwords do not match");
+  return;
+}
 
-      console.log("Submit Button Clicked");
-      console.log("User Registered:", formData);
+  try {
+  setLoading(true);
+
+  const payload = {
+    fullName: formData.fullName,
+    email: formData.email,
+    phone: formData.phone,
+    dob: formData.dob,
+    gender: formData.gender,
+    password: formData.password,
+  };
+
+  console.log("API URL =", api.defaults.baseURL);
+  console.log("Payload =", payload);
+
+  const res = await api.post("/auth/register", payload);
+
+  console.log("SUCCESS =", res.data);
+
+toast.success(res.data.message);
+
+  setFormData({
+    fullName: "",
+    email: "",
+    phone: "",
+    dob: "",
+    gender: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  navigate("/login");
+
+} catch (error) {
+ toast.error(error.response?.data?.message || "Registration Failed");
+} finally {
+  setLoading(false);
+}
     };
 
   return (
@@ -193,13 +241,13 @@ const Register = () => {
           </div>
 
           {/* Button */}
-      <button
-  type="button"
-  onClick={handleSubmit}
-  className="w-full bg-orange-500 text-white py-3 rounded-xl"
->
-  Test Button
-</button>
+          <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl"
+        >
+          {loading ? "Creating Account..." : "Create Account"}
+        </button>
         </form>
 
         <div className="border-t mt-8 pt-6 text-center">

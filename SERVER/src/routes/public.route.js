@@ -1,11 +1,11 @@
 import express from "express";
-import { ContactUsForm } from "../controllers/user.controller";
+import {ContactUs } from "../controllers/user.controller.js";
 
 
 
 const router = express.Router();
 
 
-router.post("/contact-us",ContactUsForm);
+router.post("/contact-us",ContactUs);
 
 export default router;
