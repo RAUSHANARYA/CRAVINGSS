@@ -1,6 +1,7 @@
 export const AuthProtect = async (req, res, next) => {
   try {
     // Controller Logic
+    const token = req.cookies.CravingToken;
 
     next();
 
@@ -13,3 +14,4 @@ export const AuthProtect = async (req, res, next) => {
     next(err);
   }
 };
+

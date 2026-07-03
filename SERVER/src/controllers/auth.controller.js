@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/public.model.js";
+import { genToken } from "../controllers/auth.controller.js";
 
 
 
@@ -84,6 +85,8 @@ export const LoginUser = async (req, res, next) => {
         message: "Invalid Password",
       });
     }
+   
+    await genToken(existingUser,res);
 
     res.status(200).json({
       success: true,
