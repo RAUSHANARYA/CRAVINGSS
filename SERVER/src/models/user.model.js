@@ -8,10 +8,21 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
 
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+
+    phone: {
+      type: String,
+      required: true,
+    },
+
     gender: {
       type: String,
       required: true,
-      enum: ["Male", "Female", "Other"],
     },
 
     dob: {
@@ -19,30 +30,15 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
-    phone: {
+    photo: {
       type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
-
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
+      default:
+        "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
     },
 
     password: {
       type: String,
       required: true,
-      minlength: 4,
-    },
-
-    photo: {
-      type: String,
-      default: "",
     },
   },
   {

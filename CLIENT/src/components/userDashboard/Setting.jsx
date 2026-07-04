@@ -8,7 +8,9 @@ import {
 } from "react-icons/md";
 
 const Setting = () => {
-  const { user } = useAuth();
+const { user } = useAuth();
+
+if (!user) return null;
 
   return (
     <div className="space-y-8">

@@ -1,16 +1,30 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../config/api.config";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, setUser, isLogin } = useAuth();
+const { user, setUser, isLogin, setIsLogin } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("UserData");
-    setUser(null);
+const handleLogout = async () => {
+  try {
+    const res = await api.get("/auth/logout");
 
-    navigate("/login");
-  };
+    sessionStorage.removeItem("UserData");
+
+    setUser(null);
+    setIsLogin(false);
+
+    toast.success(res.data.message);
+
+    navigate("/");
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message || error.message
+    );
+  }
+};
 
   return (
     <header className="bg-orange-500 shadow-md sticky top-0 z-50">

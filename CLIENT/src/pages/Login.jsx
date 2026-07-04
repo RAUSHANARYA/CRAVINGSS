@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Auth Context
-  const { setUser } = useAuth();
+ const { setUser, setIsLogin } = useAuth();
 
   // Login Form
   const [formData, setFormData] = useState({
@@ -42,8 +42,11 @@ const Login = () => {
       // Save User in Session Storage
       sessionStorage.setItem(
         "UserData",
-        JSON.stringify(res.data.user)
+        JSON.stringify(res.data.data)
       );
+
+      setUser(res.data.data);
+      setIsLogin(true);
 
       // Save User in Context
       setUser(res.data.user);

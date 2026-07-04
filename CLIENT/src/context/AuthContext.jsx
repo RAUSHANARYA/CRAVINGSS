@@ -5,19 +5,22 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     const data = sessionStorage.getItem("UserData");
 
     if (data) {
       setUser(JSON.parse(data));
+      setIsLogin(true);
     }
   }, []);
 
   const value = {
     user,
     setUser,
-    isLogin: !!user,
+    isLogin,
+    setIsLogin,
   };
 
   return (

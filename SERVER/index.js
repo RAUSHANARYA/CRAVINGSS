@@ -12,6 +12,9 @@ import PublicRouter from "./src/routes/public.route.js";
 import morgan from "morgan";
 import cors from "cors";
 
+import cookieParser from "cookie-parser";
+import UserRouter from "./src/routes/user.route.js";
+
 
 
 const app = express();
@@ -25,6 +28,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(morgan("dev"));
 
@@ -32,6 +36,8 @@ app.use(morgan("dev"));
 // Routes
 app.use("/auth", AuthRouter);      // Register, Login, Logout
 app.use("/public", PublicRouter);  // Public Routes
+app.use("/user", UserRouter);
+
 
 
 // Test Route
@@ -39,6 +45,15 @@ app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Server is Running",
+  });
+});
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Internal Server Error",
   });
 });
 

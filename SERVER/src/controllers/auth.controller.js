@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import User from "../models/public.model.js";
-import { genToken } from "../controllers/auth.controller.js";
+import User from "../models/user.model.js";
+import { genToken } from "../utils/auth.service.js";
 
 
 
@@ -86,12 +86,12 @@ export const LoginUser = async (req, res, next) => {
       });
     }
    
-    await genToken(existingUser,res);
+    await genToken(user, res);
 
-    res.status(200).json({
+      res.status(200).json({
       success: true,
       message: "Login Successful",
-      user,
+      data: user,
     });
 
   } catch (error) {
@@ -104,6 +104,9 @@ export const LoginUser = async (req, res, next) => {
 export const LogoutUser = async (req, res, next) => {
   try {
     // Controller Logic
+        res.clearCookie("Oreo", {
+      maxAge: 0,
+    });
 
     res.status(200).json({
       success: true,
@@ -115,3 +118,4 @@ export const LogoutUser = async (req, res, next) => {
     next(error);
   }
 };
+
