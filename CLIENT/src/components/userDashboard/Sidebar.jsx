@@ -54,15 +54,14 @@ const Sidebar = ({ active, setActive }) => {
 
         <div className="bg-orange-500 text-white text-center py-8">
 
-          <img
-            src={
-              user.photo
-                ? user.photo
-                : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            }
-            alt="profile"
-            className="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover"
-          />
+         <img
+          src={
+            user?.photo?.url ||
+            "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+          }
+          alt="profile"
+          className="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover"
+        />
 
           <h2 className="mt-4 text-xl font-bold">
             {user.fullName}

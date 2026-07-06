@@ -40,7 +40,7 @@ const Login = () => {
       toast.success(res.data.message);
 
       // Save User in Session Storage
-      sessionStorage.setItem(
+        sessionStorage.setItem(
         "UserData",
         JSON.stringify(res.data.data)
       );
@@ -48,8 +48,7 @@ const Login = () => {
       setUser(res.data.data);
       setIsLogin(true);
 
-      // Save User in Context
-      setUser(res.data.user);
+      navigate("/dashboard");
 
       // Clear Form
       setFormData({

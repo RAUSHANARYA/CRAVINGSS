@@ -67,8 +67,8 @@ const handleLogout = async () => {
               <div className="flex items-center gap-3">
 
                 <img
-                  src={
-                    user?.photo ||
+                 src={
+                    user?.photo?.url ||
                     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                   }
                   alt="Profile"

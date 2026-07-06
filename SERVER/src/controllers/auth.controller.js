@@ -32,14 +32,18 @@ export const RegisterUser = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save User
-    const user = await User.create({
-      fullName,
-      email,
-      phone,
-      dob,
-      gender,
-      password: hashedPassword,
-    });
+  const user = await User.create({
+  fullName,
+  email,
+  phone,
+  dob,
+  gender,
+  password: hashedPassword,
+  photo: {
+    url: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+    publicId: null,
+  },
+});
 
     res.status(201).json({
       success: true,
@@ -85,6 +89,7 @@ export const LoginUser = async (req, res, next) => {
         message: "Invalid Password",
       });
     }
+
    
     await genToken(user, res);
 

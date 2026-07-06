@@ -16,12 +16,22 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const value = {
-    user,
-    setUser,
-    isLogin,
-    setIsLogin,
-  };
+  const UpdateUser = (updatedUser) => {
+  setUser(updatedUser);
+
+  sessionStorage.setItem(
+    "UserData",
+    JSON.stringify(updatedUser)
+  );
+};
+
+const value = {
+  user,
+  setUser,
+  UpdateUser,
+  isLogin,
+  setIsLogin,
+};
 
   return (
     <AuthContext.Provider value={value}>

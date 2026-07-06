@@ -15,6 +15,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import UserRouter from "./src/routes/user.route.js";
 
+import cloudinary from "./src/config/cloudinary.config.js";
+
 
 
 const app = express();
@@ -65,9 +67,15 @@ app.listen(PORT, async () => {
   console.log(`Server started on port ${PORT}`);
 
   try {
-    await connectDB();
-    console.log("MongoDB Connected Successfully");
-  } catch (error) {
-    console.log(error.message);
-  }
+
+  await connectDB();
+  console.log("MongoDB Connected Successfully");
+
+  const result = await cloudinary.api.ping();
+  console.log("Cloudinary Connected");
+  console.log(result);
+
+} catch (error) {
+  console.log(error.message);
+}
 });
