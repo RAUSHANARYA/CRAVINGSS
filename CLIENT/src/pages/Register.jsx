@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    userType:"customer",
     fullName: "",
     email: "",
     phone: "",
@@ -46,6 +47,7 @@ const Register = () => {
   setLoading(true);
 
   const payload = {
+    userType: formData.userType,
     fullName: formData.fullName,
     email: formData.email,
     phone: formData.phone,
@@ -64,6 +66,7 @@ const Register = () => {
 toast.success(res.data.message);
 
   setFormData({
+    userType:"customer",
     fullName: "",
     email: "",
     phone: "",
@@ -122,7 +125,7 @@ toast.success(res.data.message);
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                value={formData.email}
+                value={formData.email.toLocaleUpperCase()}
                 onChange={handleChange}
                 required
                 className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
@@ -144,6 +147,21 @@ toast.success(res.data.message);
                 className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
               />
             </div>
+          </div>
+
+          <div>
+            <label>User Type</label>
+
+            <select
+              name="userType"
+              value={formData.userType}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-gray-300 px-4 py-3"
+            >
+              <option value="customer">Customer</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="rider">Rider</option>
+            </select>
           </div>
 
           {/* Gender & DOB */}

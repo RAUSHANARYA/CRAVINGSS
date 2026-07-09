@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
+       
     },
 
     gender: {
@@ -42,14 +43,19 @@ const UserSchema = new mongoose.Schema(
         },
       },
 
-    password: {
-      type: String,
-      required: true,
-    },
+password: {
+  type: String,
+  required: true,
+},
+
+userType: {
+  type: String,
+  enum: ["admin", "customer", "restaurant", "rider"],
+  default: "customer",
+  required: true,
+},
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", UserSchema);

@@ -5,30 +5,48 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
-  const [isLogin, setIsLogin] = useState(false);
+
+const [isLogin, setIsLogin] = useState(false);
+
+const [role, setRole] = useState(user ? user.userType : null);
 
   useEffect(() => {
     const data = sessionStorage.getItem("UserData");
 
-    if (data) {
-      setUser(JSON.parse(data));
-      setIsLogin(true);
-    }
+ if (data) {
+
+  const userData = JSON.parse(data);
+
+  setUser(userData);
+
+  setIsLogin(true);
+
+  setRole(userData.userType);
+
+}
   }, []);
 
-  const UpdateUser = (updatedUser) => {
+const UpdateUser = (updatedUser) => {
+
   setUser(updatedUser);
+
+  setRole(updatedUser.userType);
 
   sessionStorage.setItem(
     "UserData",
     JSON.stringify(updatedUser)
   );
+
 };
 
 const value = {
   user,
   setUser,
   UpdateUser,
+
+  role,
+  setRole,
+
   isLogin,
   setIsLogin,
 };

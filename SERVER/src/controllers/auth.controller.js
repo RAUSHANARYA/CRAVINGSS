@@ -8,10 +8,26 @@ import { genToken } from "../utils/auth.service.js";
 export const RegisterUser = async (req, res, next) => {
     console.log("REGISTER API HIT");
   try {
-    const { fullName, email, phone, dob, gender, password } = req.body;
+   const {
+        fullName,
+        email,
+        phone,
+        dob,
+        gender,
+        password,
+        userType
+        } = req.body;
 
     // Validation
-    if (!fullName || !email || !phone || !dob || !gender || !password) {
+    if (
+        !fullName ||
+        !email ||
+        !phone ||
+        !dob ||
+        !gender ||
+        !password ||
+        !userType
+        ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required.",
@@ -39,6 +55,7 @@ export const RegisterUser = async (req, res, next) => {
   dob,
   gender,
   password: hashedPassword,
+  userType,
   photo: {
     url: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
     publicId: null,
