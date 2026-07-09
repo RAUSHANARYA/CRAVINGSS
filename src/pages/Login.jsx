@@ -8,7 +8,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Auth Context
-  const { setUser } = useAuth();
+const {
+  setUser,
+  setIsLogin,
+  setRole,
+} = useAuth();
 
   // Login Form
   const [formData, setFormData] = useState({
@@ -40,22 +44,33 @@ const Login = () => {
       toast.success(res.data.message);
 
       // Save User in Session Storage
-      sessionStorage.setItem(
-        "UserData",
-        JSON.stringify(res.data.user)
-      );
+       sessionStorage.setItem(
+          "UserData",
+          JSON.stringify(res.data.data)
+        );
 
-      // Save User in Context
-      setUser(res.data.user);
+        setUser(res.data.data);
+        setIsLogin(true);
+        setRole(res.data.data.userType);
+
+        if (res.data.data.userType === "admin") {
+          navigate("/admin-dashboard");
+        }
+        else if (res.data.data.userType === "restaurant") {
+          navigate("/restaurant-dashboard");
+        }
+        else if (res.data.data.userType === "rider") {
+          navigate("/rider-dashboard");
+        }
+        else {
+          navigate("/dashboard");
+        }
 
       // Clear Form
       setFormData({
         email: "",
         password: "",
       });
-
-      // Redirect Dashboard
-      navigate("/dashboard");
 
     } catch (error) {
       toast.error(

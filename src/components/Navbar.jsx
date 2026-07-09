@@ -1,36 +1,41 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../config/api.config";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, setUser, isLogin } = useAuth();
+  const { user, setUser, isLogin, setIsLogin, role, setRole } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("UserData");
-    setUser(null);
+  const handleLogout = async () => {
+    try {
+      const res = await api.get("/auth/logout");
 
-    navigate("/login");
+      sessionStorage.removeItem("UserData");
+
+      setUser(null);
+      setIsLogin(false);
+      setRole(null);
+
+      toast.success(res.data.message);
+
+      navigate("/");
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   };
 
   return (
     <header className="bg-orange-500 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-
         {/* Logo */}
-        <Link
-          to="/"
-          className="text-3xl font-bold text-white tracking-wide"
-        >
+        <Link to="/" className="text-3xl font-bold text-white tracking-wide">
           🍔 Cravings
         </Link>
 
         {/* Menu */}
         <nav className="flex items-center gap-6">
-
-          <Link
-            to="/"
-            className="text-white hover:text-orange-100 font-medium"
-          >
+          <Link to="/" className="text-white hover:text-orange-100 font-medium">
             Home
           </Link>
 
@@ -43,18 +48,27 @@ const Navbar = () => {
 
           {isLogin ? (
             <>
-              <Link
-                to="/dashboard"
+              <button
+                onClick={() => {
+                  if (role === "admin") {
+                    navigate("/admin-dashboard");
+                  } else if (role === "restaurant") {
+                    navigate("/restaurant-dashboard");
+                  } else if (role === "rider") {
+                    navigate("/rider-dashboard");
+                  } else {
+                    navigate("/dashboard");
+                  }
+                }}
                 className="text-white hover:text-orange-100 font-medium"
               >
                 Dashboard
-              </Link>
+              </button>
 
               <div className="flex items-center gap-3">
-
                 <img
                   src={
-                    user?.photo ||
+                    user?.photo?.url ||
                     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                   }
                   alt="Profile"
@@ -71,7 +85,6 @@ const Navbar = () => {
                 >
                   Logout
                 </button>
-
               </div>
             </>
           ) : (
@@ -91,9 +104,7 @@ const Navbar = () => {
               </Link>
             </>
           )}
-
         </nav>
-
       </div>
     </header>
   );
