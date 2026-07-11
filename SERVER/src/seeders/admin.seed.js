@@ -7,7 +7,7 @@ const AdminUser = {
   password: await bcrypt.hash("Admin@123", 10),
   dob: "2000-01-01",
   gender: "Other",
-  phone: "9999999999",
+  phone: "9999999998",
 
   userType: "admin",
 

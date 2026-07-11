@@ -24,7 +24,7 @@ const UserData = [
     password: await bcrypt.hash("Customer@123", 10),
     dob: "2000-01-01",
     gender: "Other",
-    phone: "9876543210",
+    phone: "9876543211",
 
     userType: "customer",
 
@@ -40,7 +40,7 @@ const UserData = [
     password: await bcrypt.hash("Rider@123", 10),
     dob: "2000-01-01",
     gender: "Other",
-    phone: "9876543210",
+    phone: "9876543220",
 
     userType: "rider",
 

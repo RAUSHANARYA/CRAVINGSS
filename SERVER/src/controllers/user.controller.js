@@ -1,6 +1,7 @@
 import Contact from "../models/contact.model.js";
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.config.js";
+import bcrypt from "bcrypt";
 
 // Contact Us
 // Contact Us
@@ -110,6 +111,52 @@ if (newPhoto) {
       success: true,
       message: "Profile Updated Successfully",
       data: existingUser,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+
+
+};
+
+// Change Password
+
+export const UpdateUserPassword = async (req, res, next) => {
+  try {
+
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const currentUser = req.user;
+
+    const isMatch = await bcrypt.compare(
+      oldPassword,
+      currentUser.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Old Password is incorrect",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    currentUser.password = hashedPassword;
+
+    await currentUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password Updated Successfully",
     });
 
   } catch (error) {
