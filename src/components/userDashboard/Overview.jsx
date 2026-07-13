@@ -33,11 +33,10 @@ const Overview = () => {
 
           <img
             src={
-              user.photo
-                ? user.photo
-                : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              user?.photo?.url ||
+              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             }
-            alt="profile"
+            alt="Profile"
             className="w-28 h-28 rounded-full border-4 border-white object-cover"
           />
 

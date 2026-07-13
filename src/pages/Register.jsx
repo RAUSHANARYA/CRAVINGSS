@@ -79,7 +79,15 @@ toast.success(res.data.message);
   navigate("/login");
 
 } catch (error) {
- toast.error(error.response?.data?.message || "Registration Failed");
+  console.log("REGISTER ERROR:", error);
+
+  console.log("Response:", error.response);
+
+  console.log("Data:", error.response?.data);
+
+  toast.error(
+    error.response?.data?.message || error.message
+  );
 } finally {
   setLoading(false);
 }
@@ -125,7 +133,7 @@ toast.success(res.data.message);
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                value={formData.email.toLocaleUpperCase()}
+                value={formData.email.toLowerCase()}
                 onChange={handleChange}
                 required
                 className="w-full rounded-xl border border-gray-300 px-4 py-3.5 outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100"
